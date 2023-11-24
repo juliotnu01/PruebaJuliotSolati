@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,12 +25,22 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+Route::middleware([ 'auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::get('/posts', function () {
+        return Inertia::render('Post/postView');
+    })->name('posts');
+
+    Route::get('/create-post', function () {
+        return Inertia::render('Post/createViewPost');
+    })->name('create.post');
+
+    Route::post('/store', [PostController::class, 'store'])->name('store.post');
+    Route::get('', [PostController::class, 'index'])->name('list.all.posts');
+    
+
+
 });
